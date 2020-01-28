@@ -13,7 +13,8 @@ class bcolors:
 
 
 class Person:
-    def __init__(self, hp, mp, atk, df, magic, items):
+    def __init__(self, name, hp, mp, atk, df, magic, items):
+        self.name = name
         self.maxhp = hp
         self.hp = hp
         self.maxmp = mp
@@ -56,16 +57,17 @@ class Person:
 
     def choose_action(self):
         i = 1
-        print(bcolors.OKGREEN, "Actions", bcolors.ENDC)
+        print("\n" + "    " + bcolors.BOLD + self.name + bcolors.ENDC)
+        print(bcolors.OKGREEN, "    Actions", bcolors.ENDC)
         for item in self.actions:
-            print("    ", str(i) + ":", item)
+            print("        ", str(i) + ":", item)
             i += 1
 
     def choose_magic(self):
         i = 1
         print("Magic")
         for spell in self.magic:
-            print("    ", str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
+            print("        ", str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
             i += 1
 
     def choose_item(self):
@@ -73,5 +75,30 @@ class Person:
 
         print(bcolors.OKGREEN + bcolors.BOLD + "ITEMS:" + bcolors.ENDC)
         for item in self.items:
-            print("    ", str(i) + ".", item["item"].name, ":", item["item"].description, "(", item["quantity"], ")")
+            print("        ", str(i) + ".", item["item"].name, ":", item["item"].description, "(", item["quantity"], ")")
             i += 1
+
+    def get_stats(self):
+        hp_bar = ""
+        mp_bar = ""
+        bar_ticks = (self.hp / self.maxhp) * 100 / 4
+        mp_ticks = (self.mp / self.maxmp) * 100 / 10
+
+        while bar_ticks > 0:
+            hp_bar += "█"
+            bar_ticks -= 1
+
+        while mp_ticks > 0:
+            mp_bar += "█"
+            mp_ticks -= 1
+
+        while len(hp_bar) < 25:
+            hp_bar += " "
+
+        while len(mp_bar) < 10:
+            mp_bar += " "
+
+        print("                       --------------------------              ---------")
+        print(bcolors.BOLD + self.name + " :    " + str(self.hp) + "/ " + str(self.maxhp) + "|" +
+              bcolors.OKGREEN + hp_bar + bcolors.ENDC + bcolors.BOLD +
+              "|    " + str(self.mp) + "/" + str(self.maxmp) + " | " + bcolors.OKBlue + mp_bar + bcolors.ENDC + "| ")
